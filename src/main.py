@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+from src.api.v1.router import api_router
 from src.config import settings
 
 app = FastAPI(
@@ -9,6 +10,9 @@ app = FastAPI(
     version="0.1.0",
     debug=settings.debug,
 )
+
+# API 라우터 등록
+app.include_router(api_router, prefix="/api/v1")
 
 
 # Health check 엔드포인트
