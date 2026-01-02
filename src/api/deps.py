@@ -6,9 +6,13 @@ from src.domain.post.repository import PostRepository
 from src.domain.post.service import PostService
 from src.domain.script.repository import ScriptRepository
 from src.domain.script.service import ScriptService
+from src.domain.upload_job.repository import UploadJobRepository
+from src.domain.upload_job.service import UploadJobService
 from src.domain.video.repository import VideoRepository
 from src.domain.video.service import VideoService
+from src.integrations.instagram_service import InstagramService
 from src.integrations.openai_service import OpenAIService
+from src.integrations.youtube_service import YouTubeService
 
 
 # Repository Dependencies
@@ -27,10 +31,25 @@ def get_post_repository() -> PostRepository:
     return PostRepository()
 
 
+def get_upload_job_repository() -> UploadJobRepository:
+    """Upload Job Repository 의존성"""
+    return UploadJobRepository()
+
+
 # Integration Dependencies
 def get_openai_service() -> OpenAIService:
     """OpenAI Service 의존성"""
     return OpenAIService()
+
+
+def get_youtube_service() -> YouTubeService:
+    """YouTube Service 의존성"""
+    return YouTubeService()
+
+
+def get_instagram_service() -> InstagramService:
+    """Instagram Service 의존성"""
+    return InstagramService()
 
 
 # Service Dependencies
@@ -57,7 +76,21 @@ def get_post_service(
     return PostService(repository, script_repository, openai_service)
 
 
+def get_upload_job_service(
+    repository: Annotated[UploadJobRepository, Depends(get_upload_job_repository)],
+    video_repository: Annotated[VideoRepository, Depends(get_video_repository)],
+    post_repository: Annotated[PostRepository, Depends(get_post_repository)],
+    youtube_service: Annotated[YouTubeService, Depends(get_youtube_service)],
+    instagram_service: Annotated[InstagramService, Depends(get_instagram_service)],
+) -> UploadJobService:
+    """Upload Job Service 의존성"""
+    return UploadJobService(
+        repository, video_repository, post_repository, youtube_service, instagram_service
+    )
+
+
 # Type Aliases
 VideoServiceDep = Annotated[VideoService, Depends(get_video_service)]
 ScriptServiceDep = Annotated[ScriptService, Depends(get_script_service)]
 PostServiceDep = Annotated[PostService, Depends(get_post_service)]
+UploadJobServiceDep = Annotated[UploadJobService, Depends(get_upload_job_service)]

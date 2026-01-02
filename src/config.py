@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     # Instagram
     instagram_manual_upload: bool = True
     instagram_access_token: Optional[str] = None
-    instagram_account_id: Optional[str] = None
+    instagram_user_id: Optional[str] = None
 
     # Upload Settings
     max_video_size_mb: int = 500
