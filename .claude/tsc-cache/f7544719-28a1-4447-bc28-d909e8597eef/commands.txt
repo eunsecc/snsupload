@@ -1,0 +1,2 @@
+frontend:build:cd /Users/eunseok/video-upload-automation/frontend && npm run build
+frontend:tsc:cd /Users/eunseok/video-upload-automation/frontend && npx tsc --noEmit
